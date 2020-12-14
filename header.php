@@ -1,97 +1,20 @@
-<?php
-  $siteName = 'F1-Stories';
-  $title = wp_get_document_title();
-  $descr = get_bloginfo('description');
-  $keyW = 'конструкторы, онлайн конструкторы, создание сайтов';
-  $img = $_SERVER['HTTP_HOST'].'/img/soc_img.jpg';
-  $url = $_SERVER['REQUEST_URI'];
-?>
-
-<?php if(is_single() || is_page()) {
-  //ДЛЯ ПОСТОВ
-  if (have_posts()) : while (have_posts()) : the_post();
-    $seoMetaTitle = carbon_get_the_post_meta('crb_post_seo_title');
-    if ($seoMetaTitle != '') { $title = $seoMetaTitle; } else { $title = get_the_title($post->ID); }
-
-    $seoMetaDescr = carbon_get_the_post_meta('crb_post_seo_description');
-    if ($seoMetaDescr != '') { $descr = $seoMetaDescr; } else { $descr = get_the_excerpt($post->ID); }
-
-    $seoMetakeyw = carbon_get_the_post_meta('crb_post_seo_keywords');
-    if ($seoMetakeyw != '') { $keyW = $seoMetakeyw; }
-
-    $img = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
-    $url = get_the_permalink($post->ID);
-    endwhile; endif;
-
-  } elseif (is_category()) {
-    // ДЛЯ КАТЕГОРИЙ
-    $seoMetaTitle = carbon_get_term_meta(get_queried_object_id(),'crb_category_seo_title');
-    if ($seoMetaTitle != '') { $title = $seoMetaTitle; };
-
-    $seoMetaDescr = carbon_get_term_meta(get_queried_object_id(),'crb_category_seo_description');
-    if ($seoMetaDescr != '') { $descr = $seoMetaDescr; };
-
-    $seoMetakeyw = carbon_get_term_meta(get_queried_object_id(),'crb_category_seo_keywords');
-    if ($seoMetakeyw != '') { $keyW = $seoMetakeyw; };
-
-  } elseif (is_home()) {
-    $title = 'Конструкторы для сайтов: обзоры, фишки, отзывы';
-    $descr = 'Какие есть конструкторы для сайтов. Какой выбрать конструктор для сайта. Хотите создать сайт на конструкторе, но не знаете, на каком? Заходите.';
-
-  } elseif (is_search()) {
-    $title = 'Поиск по запросу "'.$s.'"';
-  
-  } elseif (is_404()) {
-    $title = '404 - Страница не найдена';
-
-  } elseif (is_archive()) {
-    $cat_obj = $wp_query->get_queried_object();
-    $name = $cat_obj->name;
-  } 
-?>
-
 <!doctype html>
 <html <?php language_attributes(); ?>>
 
 <head>
-  <title><?php echo $title.' — '.$siteName; ?></title>
   <meta charset="<?php bloginfo( 'charset' ); ?>">
-  <meta name="description" content='<?php echo $descr; ?>'>
-  <meta name="keywords" content='<?php echo $keyW; ?>'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
-  <link rel="profile" href="http://gmpg.org/xfn/11">
-  <link rel="apple-touch-icon" href="/example.png">
-  <base href="<?php echo home_url(); ?>">
-  <link rel="alternate" hreflang="x-default" href="<?php echo home_url(); ?>">
-
-  <!-- Google Plus -->
-  <meta itemprop="name" content='<?php echo $title; ?>'/>
-  <meta itemprop="description" content="<?php echo $descr; ?>"/>
-  <meta itemprop="image" content="<?php echo $img; ?>"/>
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content='<?php echo $title; ?>'>
-  <meta name="twitter:description" content="<?php echo $descr; ?>"/>
-  <meta name="twitter:image:src" content="<?php echo $img; ?>"/>
-  <meta name="twitter:domain" content="<?php echo $url; ?>"/>
-
-  <!-- Facebook -->
-  <meta property="og:type" content="website"/>
-  <meta property="og:title" content='<?php echo $title; ?>'/>
-  <meta property="og:description" content="<?php echo $descr; ?>"/>
-  <meta property="og:url" content="<?php echo $url; ?>"/>
-  <meta property="og:image" content="<?php echo $img; ?>"/>
-  <meta property="og:site_name" content='<?php echo $siteName; ?>'/>
-
   <?php
-  // ENQUEUE your css and js in inc/enqueues.php
-
     wp_head();
-	?>
-
+  ?>
+  <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(); ?>">
+  <?php if (is_singular('blogs')): ?>
+    <meta property="og:article:published_time" content="<?php echo get_post_time('Y/n/j'); ?>" />
+    <meta property="og:article:article:modified_time" content="<?php echo get_the_modified_time('Y/n/j'); ?>" />
+    <meta property="og:article:author" content="<?php echo get_the_author(); ?>" />
+    <!-- <script data-ad-client="ca-pub-6649504422654100" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <?php endif; ?>
 </head>
 <body <?php echo body_class(); ?>>
   <!-- <div class="preloader"></div> -->

@@ -86,7 +86,7 @@ function my_login_logo() { ?>
 add_action( 'login_enqueue_scripts', 'my_login_logo' );
 
 function wpb_login_logo_url_title() {
-  return 'Genichesk.info';
+  return 'F1Stories';
 }
 add_filter( 'login_headertitle', 'wpb_login_logo_url_title' );
 
